@@ -1,0 +1,6 @@
+<li>
+  <span class="content"><%= wrap(task.content) %></span>
+  <% if current_user?(task.user) %>
+    <%= render partial: 'shared/delete_link', locals: { item: task, user: @user } %>
+  <% end %>
+</li>

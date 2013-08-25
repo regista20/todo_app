@@ -53,12 +53,38 @@ describe "User pages" do
   describe "profile page" do
     let(:user) { FactoryGirl.create(:user) }
     before do
+      31.times { FactoryGirl.create(:task, user: user) } 
       sign_in user
       visit user_path(user)
     end
 
-    it { should have_content(user.name) }
-    it { should have_title(user.name) }
+    describe "should have correct user" do
+      it { should have_content(user.name) }
+      it { should have_title(user.name) }
+    end
+
+    describe "should have correct tasks" do
+      it { should have_selector('div.pagination') }
+      it { should have_content(user.tasks.count) }
+
+      it "should have 30 contents at page 1" do
+        count = 0
+        user.tasks.paginate(page: 1).each do |task|
+          expect(page).to have_selector('li', text: task.content)
+          count += 1
+        end
+        expect(count).equal? 30
+      end
+
+      it "should have 1 content at page 2" do
+        count = 0
+        user.tasks.paginate(page: 2).each do |task|
+          expect(page).to have_selector('li', text: task.content)
+          count += 1
+        end
+        expect(count).equal? 1
+      end
+    end
   end
 
   describe "signup page" do
@@ -153,6 +179,20 @@ describe "User pages" do
       end
       before { patch user_path(user), params }
       specify { expect(user.reload).not_to be_admin }
+    end
+  end
+
+  describe "other users pages" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:user_other) { FactoryGirl.create(:user) }
+    before do
+      FactoryGirl.create(:task, user: user_other, content: "Foo")
+      sign_in user
+      visit user_path(user_other)
+    end
+
+    describe "delete links" do
+      it { should_not have_link('delete') }
     end
   end
 end

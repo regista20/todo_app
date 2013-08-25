@@ -91,6 +91,19 @@ describe "Authentication" do
           it { should have_title('Sign in') }
         end
       end
+
+      describe "in the Tasks controller" do
+
+        describe "submitting to the create action" do
+          before { post tasks_path }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before { delete task_path(FactoryGirl.create(:task)) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+      end
     end
 
     describe "for signed_in users" do

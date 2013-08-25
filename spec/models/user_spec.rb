@@ -17,6 +17,8 @@ describe User do
   it { should respond_to(:remember_token) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin) }
+  it { should respond_to(:tasks) }
+  it { should respond_to(:feed) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -123,5 +125,39 @@ describe User do
   describe "remember_token" do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
+  end
+
+  describe "task associations" do
+
+    before { @user.save }
+    let!(:older_task) do
+      FactoryGirl.create(:task, user: @user, created_at: 1.day.ago)
+    end
+    let!(:newer_task) do
+      FactoryGirl.create(:task, user: @user, created_at: 1.hour.ago)
+    end
+
+    it "should have the right tasks in the right order" do
+      expect(@user.tasks.to_a).to eq [newer_task, older_task]
+    end
+
+    it "should destroy associated tasks" do
+      tasks = @user.tasks.to_a
+      @user.destroy
+      expect(tasks).not_to be_empty
+      tasks.each do |task|
+        expect(Task.where(id: task.id)).to be_empty
+      end
+    end
+
+    describe "status" do
+      let(:unfollowed_post) do
+        FactoryGirl.create(:task, user: FactoryGirl.create(:user))
+      end
+
+      its(:feed) { should include(newer_task) }
+      its(:feed) { should include(older_task) }
+      its(:feed) { should_not include(unfollowed_post) }
+    end
   end
 end

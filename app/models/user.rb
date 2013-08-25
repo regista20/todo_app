@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :tasks, dependent: :destroy
   before_save { email.downcase! }
   before_create :create_remember_token
-
   has_secure_password
 
   validates :name,  presence: true, length: { maximum: 50 }
@@ -16,6 +16,10 @@ class User < ActiveRecord::Base
 
   def User.encrypt(token)
     Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  def feed
+    Task.where("user_id = ?", id)
   end
 
   private
