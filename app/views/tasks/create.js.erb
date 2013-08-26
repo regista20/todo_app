@@ -1,3 +1,3 @@
 $('#feeds').html('<%= j render partial: 'shared/feed_item', collection: @feed_items %>');
 $('#task_counts').html('<%= pluralize(current_user.tasks.count, "task") %>');
-$("input#task_content").val("");
+$('input#task_content').val("");
