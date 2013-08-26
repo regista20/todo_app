@@ -2,11 +2,13 @@ class TasksController < ApplicationController
   before_action :signed_in_user, only: [:create, :destroy]
   before_action :correct_user, only: :destroy
 
+  respond_to :html, :js
+
   def create
     @task = current_user.tasks.build(task_params)
+    @feed_items = current_user.feed.paginate(page: params[:page])
     if @task.save
-      flash[:success] = "Task created!"
-      redirect_to root_url
+      respond_with root_url
     else
       @feed_items = []
       render 'static_pages/home'
@@ -14,8 +16,9 @@ class TasksController < ApplicationController
   end
 
   def destroy
+    @feed_items = current_user.feed.paginate(page: params[:page])
     @task.destroy
-    redirect_to root_url
+    respond_with root_url
   end
 
   private
