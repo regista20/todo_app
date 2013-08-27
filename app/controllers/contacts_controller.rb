@@ -14,6 +14,7 @@ class ContactsController < ApplicationController
       @contact = Contact.new(contact_params)
       @contact.save
       flash.now[:success] = "Thank you for your message!"
+      ContactNotifier.sent(@contact).deliver
     else
       render :new
     end
