@@ -68,6 +68,11 @@ describe "Contact pages" do
 
       it { should have_title('Done') }
       it { should have_success_message('Thank') }
+
+      describe "visiting another page" do
+        before { click_link "Home" }
+        it { should_not have_success_message('') }
+      end
     end
   end
 end
