@@ -18,7 +18,7 @@ describe "Task Pages" do
 
       describe "error messages" do
         before { click_button "Post" }
-        it { should have_content('error') }
+        it { should have_error_message('error') }
       end
     end
   end

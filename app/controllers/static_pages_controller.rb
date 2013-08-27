@@ -13,5 +13,6 @@ class StaticPagesController < ApplicationController
   end
 
   def contact
+    @contact = Contact.new
   end
 end

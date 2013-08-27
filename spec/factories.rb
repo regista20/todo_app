@@ -14,4 +14,11 @@ FactoryGirl.define do
     content "Lorem ipsum"
     user
   end
+
+  factory :contact do
+    name  "Example User"
+    email "user@example.com"
+    title "foo"
+    content "bar"
+  end
 end

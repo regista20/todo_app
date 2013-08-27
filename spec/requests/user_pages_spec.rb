@@ -108,7 +108,7 @@ describe "User pages" do
       describe "after submission" do
         before { click_button submit }
 
-        it { should have_content('error') }
+        it { should have_error_message('error') }
         it { should have_title('Sign up') }
       end
     end
@@ -131,7 +131,7 @@ describe "User pages" do
 
         it { should have_link('Sign out') }
         it { should have_title(user.name) }
-        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+        it { should have_success_message('Welcome') }
       end
     end
   end
@@ -151,7 +151,7 @@ describe "User pages" do
 
     describe "with invalid information" do
       before { click_button "Save changes" }
-      it { should have_content('error') }
+      it { should have_error_message('error') }
     end
 
     describe "with valid information" do
@@ -166,7 +166,7 @@ describe "User pages" do
       end
 
       it { should have_title(new_name) }
-      it { should have_selector('div.alert.alert-success') }
+      it { should have_success_message('') }
       it { should have_link('Sign out', href: signout_path) }
       specify { expect(user.reload.name).to eq  new_name }
       specify { expect(user.reload.email).to eq new_email }
