@@ -14,7 +14,7 @@ TodoApp::Application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Set up email server
   config.action_mailer.delivery_method = :smtp
@@ -24,9 +24,11 @@ TodoApp::Application.configure do
     domain: "gmail.com",
     authentication: "plain",
     user_name: "regista20ys@gmail.com",
-    password: "secret",
+    password: "ssoccer6",
     enable_starttls_auto: true
   }
+
+  config.action_mailer.default_url_options = { host: "localhost:3000" }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
