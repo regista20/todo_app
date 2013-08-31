@@ -12,7 +12,7 @@ describe User do
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
-  it { should respond_to(:remember_token) }
+  it { should respond_to(:auth_token) }
   it { should respond_to(:password_reset_token) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin) }
@@ -119,9 +119,9 @@ describe User do
     end
   end
 
-  describe "remember_token" do
+  describe "auth_token" do
     before { user.save }
-    its(:remember_token) { should_not be_blank }
+    its(:auth_token) { should_not be_blank }
   end
 
   describe "task associations" do
